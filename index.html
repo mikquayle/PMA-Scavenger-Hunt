@@ -22,13 +22,14 @@
     font-display:swap;
   }
   :root{
-    --pink-bg:#f6bdb2;
-    --pink-deep:#e2665a;
-    --pink-line:#e0a89e;
-    --ink:#18140f;
-    --paper:#fff9f4;
-    --tape:#ffe07a;
-    --green:#4a9d6f;
+    --scarlet:#e61515;
+    --scarlet-soft:#f0776a;
+    --pink-bg:#e61515;
+    --pink-line:rgba(255,255,255,.4);
+    --ink:#000000;
+    --gray:#606060;
+    --paper:#ffffff;
+    --green:#2f7a4d;
     --font-pragmatica:'Pragmatica-Bold','Archivo Black',sans-serif;
     --font-opensauce:'Open Sauce Sans','Poppins',sans-serif;
   }
@@ -47,31 +48,18 @@
     padding:36px 22px 60px;
     position:relative;
   }
-  /* optional collage strip — drop your own top-down photos here to echo the
-     original poster border. Safe to delete the whole #photoStrip block if
-     you'd rather keep it clean for mobile. */
-  .photo-strip{
-    display:flex;
-    gap:8px;
-    margin:0 0 22px;
-    height:64px;
-  }
-  .photo-strip .slot{
-    flex:1;
-    background:repeating-linear-gradient(135deg, rgba(0,0,0,.06) 0 8px, transparent 8px 16px);
-    border:2px solid var(--ink);
-    filter:grayscale(1);
-  }
 
   header{margin-bottom:8px; text-align:center;}
   .title-eyebrow-line{
     font-family:var(--font-pragmatica);
     font-weight:700;
-    font-size:22px;
+    font-style:italic;
+    font-size:32px;
     letter-spacing:-0.077em;
     line-height:1;
     display:block;
-    margin:0 0 6px;
+    margin:0 0 8px;
+    color:var(--paper);
   }
   h1{
     font-family:var(--font-opensauce);
@@ -82,14 +70,14 @@
     letter-spacing:-0.077em;
   }
   .sub{
-    font-size:19px;
-    font-weight:700;
+    font-size:27px;
+    font-weight:800;
     margin:0 0 4px;
     text-transform:uppercase;
-    letter-spacing:.03em;
+    letter-spacing:.02em;
   }
   .sub span{
-    border-bottom:4px solid var(--ink);
+    border-bottom:5px solid var(--ink);
     padding-bottom:3px;
   }
   .eyebrow{
@@ -140,7 +128,7 @@
     width:66px;
     height:66px;
     border:3px solid var(--ink);
-    background:transparent;
+    background:var(--paper);
     padding:0;
     cursor:pointer;
     display:flex;
@@ -190,8 +178,8 @@
   .task-copy p{
     margin:0;
     font-weight:700;
-    font-size:17px;
-    line-height:1.25;
+    font-size:21px;
+    line-height:1.22;
   }
   .task-copy small{
     display:block;
@@ -242,7 +230,7 @@
     font-size:11px;
     text-transform:uppercase;
     letter-spacing:.1em;
-    color:var(--tape);
+    color:var(--scarlet-soft);
     margin-bottom:2px;
     font-weight:700;
   }
@@ -293,7 +281,7 @@
     height:74px;
     border-radius:50%;
     background:var(--paper);
-    border:5px solid var(--pink-deep);
+    border:5px solid var(--scarlet);
     cursor:pointer;
   }
   .shutter:active{transform:scale(.92);}
@@ -317,8 +305,8 @@
     color:var(--paper);
   }
   .btn-use{
-    background:var(--pink-deep);
-    color:var(--ink);
+    background:var(--scarlet);
+    color:var(--paper);
   }
 
   /* ---- Completion overlay ---- */
@@ -370,7 +358,7 @@
     margin:0 0 10px;
   }
   .done-time{
-    color:var(--tape);
+    color:var(--scarlet-soft);
     font-weight:700;
     font-size:14px;
     text-transform:uppercase;
@@ -385,27 +373,38 @@
     max-width:320px;
     margin:0 auto;
   }
-  .prize-row{
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    gap:6px;
-    margin-top:24px;
-  }
-  .prize-row svg{
-    width:34px;
-    height:38px;
-    flex:none;
-  }
-  .prize-row svg:first-child{transform:rotate(90deg);}
-  .prize-row svg:last-child{transform:rotate(-90deg);}
   .done-overlay .prize{
-    background:var(--tape);
+    margin-top:22px;
+    background:var(--paper);
+    border:3px solid var(--scarlet);
     color:var(--ink);
     font-weight:800;
     padding:14px 18px;
     border-radius:14px;
     font-size:15px;
+  }
+  .btn-share{
+    margin-top:16px;
+    background:var(--scarlet);
+    color:var(--paper);
+    border:none;
+    font-family:'Poppins',sans-serif;
+    font-weight:700;
+    font-size:15px;
+    padding:15px 22px;
+    border-radius:14px;
+    cursor:pointer;
+    width:100%;
+    max-width:320px;
+  }
+  .btn-share:active{transform:scale(.98);}
+  .share-hint{
+    color:var(--paper);
+    opacity:.55;
+    font-size:12px;
+    font-weight:600;
+    margin:10px 0 0;
+    max-width:280px;
   }
   canvas#confetti{
     position:fixed;
@@ -413,76 +412,21 @@
     z-index:70;
     pointer-events:none;
   }
-  .accent-hand{
-    width:56px;
-    height:62px;
-    display:block;
-    margin:8px auto 0;
-    transform:rotate(180deg);
-    overflow:visible;
-  }
-  .eyebrow-row{
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    gap:2px;
-  }
   .visually-hidden{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);}
 
   @media (max-width:360px){
-    .photo-strip{height:44px;}
     h1{font-size:38px;}
   }
 </style>
 </head>
 <body>
 
-<!-- Original halftone pop-art accents (hand-drawn as SVG, not traced from any source image) -->
-<svg width="0" height="0" style="position:absolute">
-  <defs>
-    <symbol id="pointHand" viewBox="-42 -42 84 92">
-      <!-- offset shadow layer, pop-art style -->
-      <g transform="translate(5,5)" fill="var(--pink-deep)" stroke="#18140f" stroke-width="2">
-        <rect x="-6" y="-32" width="15" height="52" rx="7"/>
-        <ellipse cx="0" cy="20" rx="23" ry="17"/>
-        <ellipse cx="-17" cy="10" rx="9" ry="14" transform="rotate(-28 -17 10)"/>
-      </g>
-      <!-- main solid layer -->
-      <g fill="#18140f">
-        <rect x="-6" y="-32" width="15" height="52" rx="7"/>
-        <ellipse cx="0" cy="20" rx="23" ry="17"/>
-        <ellipse cx="-17" cy="10" rx="9" ry="14" transform="rotate(-28 -17 10)"/>
-      </g>
-    </symbol>
-
-    <symbol id="megaphone" viewBox="-10 -30 100 70">
-      <g transform="translate(4,4)" fill="var(--pink-deep)" stroke="#18140f" stroke-width="2">
-        <polygon points="0,-6 0,6 22,20 22,-20"/>
-        <polygon points="22,-20 60,-32 60,32 22,20"/>
-        <rect x="-10" y="-3" width="12" height="10" rx="2"/>
-      </g>
-      <g fill="#18140f">
-        <polygon points="0,-6 0,6 22,20 22,-20"/>
-        <polygon points="22,-20 60,-32 60,32 22,20"/>
-        <rect x="-10" y="-3" width="12" height="10" rx="2"/>
-      </g>
-    </symbol>
-  </defs>
-</svg>
-
 <div class="wrap">
-  <div class="photo-strip" id="photoStrip" aria-hidden="true">
-    <div class="slot"></div><div class="slot"></div><div class="slot"></div><div class="slot"></div>
-  </div>
-
   <header>
     <span class="title-eyebrow-line">UNLV PMA</span>
     <h1>SCAVENGER<br>HUNT</h1>
     <p class="sub"><span>Take Selfies..</span></p>
-    <div class="eyebrow-row">
-      <p class="eyebrow">Tap a box below to snap each one</p>
-      <svg class="accent-hand" viewBox="-42 -42 84 92" aria-hidden="true"><use href="#pointHand"></use></svg>
-    </div>
+    <p class="eyebrow">Tap a box below to snap each one</p>
   </header>
 
   <div class="progress-row">
@@ -492,7 +436,7 @@
 
   <div id="taskList"></div>
 
-  <footer class="hint">Complete all six to unlock your prize 🎉</footer>
+  <footer class="hint">Complete all six to win your PMA prize! 🎁</footer>
 </div>
 
 <!-- Camera overlay -->
@@ -521,11 +465,9 @@
   <h2>YOU DID IT!</h2>
   <p class="done-time" id="doneTime"></p>
   <p class="done-msg">Head back to the booth to claim your prize.</p>
-  <div class="prize-row">
-    <svg viewBox="-42 -42 84 92" aria-hidden="true"><use href="#pointHand"></use></svg>
-    <div class="prize">🎁 Show this screen at the booth</div>
-    <svg viewBox="-42 -42 84 92" aria-hidden="true"><use href="#pointHand"></use></svg>
-  </div>
+  <div class="prize">🎁 Show this screen at the booth</div>
+  <button class="btn-share" id="sharePhotosBtn">Save / Send Your Photos</button>
+  <p class="share-hint">Saves to your camera roll, or lets you text/email them to us</p>
 </div>
 
 <canvas id="confetti"></canvas>
@@ -563,6 +505,57 @@ const camClose = document.getElementById('camClose');
 const doneOverlay = document.getElementById('doneOverlay');
 const photoGrid = document.getElementById('photoGrid');
 const doneTime = document.getElementById('doneTime');
+const sharePhotosBtn = document.getElementById('sharePhotosBtn');
+
+function dataURLtoFile(dataurl, filename){
+  const parts = dataurl.split(',');
+  const mimeMatch = parts[0].match(/:(.*?);/);
+  const mime = mimeMatch ? mimeMatch[1] : 'image/jpeg';
+  const bstr = atob(parts[1]);
+  let n = bstr.length;
+  const u8arr = new Uint8Array(n);
+  while(n--){ u8arr[n] = bstr.charCodeAt(n); }
+  return new File([u8arr], filename, { type: mime });
+}
+
+function downloadFile(file){
+  const url = URL.createObjectURL(file);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = file.name;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  setTimeout(() => URL.revokeObjectURL(url), 4000);
+}
+
+async function sharePhotos(){
+  const files = state
+    .filter(t => t.photo)
+    .map((t, i) => dataURLtoFile(t.photo, `unlv-pma-scavenger-hunt-${i + 1}.jpg`));
+
+  if(!files.length) return;
+
+  if(navigator.canShare && navigator.canShare({ files })){
+    try{
+      await navigator.share({
+        files,
+        title: 'UNLV PMA Scavenger Hunt',
+        text: 'My UNLV PMA Scavenger Hunt selfies!'
+      });
+      return;
+    }catch(err){
+      if(err && err.name === 'AbortError') return; // user closed the share sheet
+      // fall through to download fallback on real failures
+    }
+  }
+
+  files.forEach((file, i) => {
+    setTimeout(() => downloadFile(file), i * 350);
+  });
+}
+
+sharePhotosBtn.addEventListener('click', sharePhotos);
 
 function formatDuration(ms){
   const totalSec = Math.max(0, Math.round(ms/1000));
@@ -719,7 +712,7 @@ function resizeConfetti(){
 window.addEventListener('resize', resizeConfetti);
 resizeConfetti();
 
-const CONFETTI_COLORS = ['#e8879e', '#ffe07a', '#fff9f4', '#4a9d6f', '#18140f'];
+const CONFETTI_COLORS = ['#e61515', '#f5978a', '#ffffff', '#606060', '#000000'];
 
 function fireConfetti(){
   confettiPieces = [];
