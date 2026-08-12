@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Scavenger Hunt</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --pink-bg:#f3c4d3;
+    --pink-deep:#e8879e;
+    --pink-line:#d9a3b2;
+    --ink:#18140f;
+    --paper:#fff9f4;
+    --tape:#ffe07a;
+    --green:#4a9d6f;
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--pink-bg);
+    font-family:'Poppins',sans-serif;
+    color:var(--ink);
+    min-height:100vh;
+    overflow-x:hidden;
+  }
+  .wrap{
+    max-width:480px;
+    margin:0 auto;
+    padding:36px 22px 60px;
+    position:relative;
+  }
+  /* optional collage strip — drop your own top-down photos here to echo the
+     original poster border. Safe to delete the whole #photoStrip block if
+     you'd rather keep it clean for mobile. */
+  .photo-strip{
+    display:flex;
+    gap:8px;
+    margin:0 0 22px;
+    height:64px;
+  }
+  .photo-strip .slot{
+    flex:1;
+    background:repeating-linear-gradient(135deg, rgba(0,0,0,.06) 0 8px, transparent 8px 16px);
+    border:2px solid var(--ink);
+    filter:grayscale(1);
+  }
+
+  header{margin-bottom:8px; text-align:center;}
+  h1{
+    font-family:'Archivo Black',sans-serif;
+    font-size:46px;
+    line-height:.9;
+    margin:0 0 12px;
+    letter-spacing:-.01em;
+  }
+  .sub{
+    font-size:19px;
+    font-weight:700;
+    margin:0 0 4px;
+    text-transform:uppercase;
+    letter-spacing:.03em;
+  }
+  .sub span{
+    border-bottom:4px solid var(--ink);
+    padding-bottom:3px;
+  }
+  .eyebrow{
+    font-size:13px;
+    font-weight:600;
+    color:var(--ink);
+    opacity:.6;
+    margin:10px 0 0;
+  }
+
+  .progress-row{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin:22px 0 30px;
+  }
+  .progress-track{
+    flex:1;
+    height:10px;
+    background:rgba(255,255,255,.55);
+    border-radius:99px;
+    overflow:hidden;
+    border:2px solid var(--ink);
+  }
+  .progress-fill{
+    height:100%;
+    background:var(--ink);
+    width:0%;
+    transition:width .5s cubic-bezier(.65,0,.35,1);
+  }
+  .progress-count{
+    font-weight:800;
+    font-size:14px;
+    white-space:nowrap;
+  }
+
+  .task{
+    display:flex;
+    gap:16px;
+    align-items:flex-start;
+    padding:18px 0;
+    border-bottom:2px dashed var(--pink-line);
+  }
+  .task:last-child{border-bottom:none;}
+
+  .box-btn{
+    flex:none;
+    width:66px;
+    height:66px;
+    border:3px solid var(--ink);
+    background:transparent;
+    padding:0;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    position:relative;
+    transition:transform .15s ease;
+  }
+  .box-btn:active{transform:scale(.93);}
+  .box-btn.done{
+    border:none;
+    padding:0;
+  }
+  .polaroid{
+    width:66px;
+    height:66px;
+    background:var(--paper);
+    border:2px solid var(--ink);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
+    transform:rotate(var(--rot,-3deg));
+    box-shadow:0 3px 0 rgba(0,0,0,.12);
+  }
+  .polaroid img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+  }
+  .badge-check{
+    position:absolute;
+    top:-8px;
+    right:-8px;
+    width:22px;
+    height:22px;
+    background:var(--green);
+    border:2px solid var(--ink);
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .badge-check svg{width:12px;height:12px;}
+
+  .task-copy{padding-top:6px;}
+  .task-copy p{
+    margin:0;
+    font-weight:700;
+    font-size:17px;
+    line-height:1.25;
+  }
+  .task-copy small{
+    display:block;
+    margin-top:4px;
+    font-size:12px;
+    font-weight:600;
+    color:var(--ink);
+    opacity:.55;
+    text-transform:uppercase;
+    letter-spacing:.06em;
+  }
+
+  footer.hint{
+    margin-top:26px;
+    text-align:center;
+    font-size:13px;
+    font-weight:600;
+    opacity:.6;
+  }
+
+  /* ---- Camera overlay ---- */
+  .overlay{
+    position:fixed;
+    inset:0;
+    background:var(--ink);
+    z-index:50;
+    display:flex;
+    flex-direction:column;
+    transform:translateY(100%);
+    transition:transform .35s cubic-bezier(.65,0,.35,1);
+  }
+  .overlay.open{transform:translateY(0);}
+  .cam-top{
+    padding:18px 20px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+  }
+  .cam-title{
+    color:var(--paper);
+    font-weight:800;
+    font-size:16px;
+    line-height:1.3;
+  }
+  .cam-title span{
+    display:block;
+    font-size:11px;
+    text-transform:uppercase;
+    letter-spacing:.1em;
+    color:var(--tape);
+    margin-bottom:2px;
+    font-weight:700;
+  }
+  .close-btn{
+    background:rgba(255,255,255,.12);
+    border:none;
+    color:var(--paper);
+    width:36px;
+    height:36px;
+    border-radius:50%;
+    font-size:18px;
+    cursor:pointer;
+    flex:none;
+  }
+  .cam-stage{
+    flex:1;
+    position:relative;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
+    background:#000;
+  }
+  video, .shot-preview{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    transform:scaleX(-1);
+  }
+  .shot-preview{transform:scaleX(-1);}
+  .cam-msg{
+    color:var(--paper);
+    text-align:center;
+    padding:0 30px;
+    font-weight:600;
+    font-size:14px;
+    opacity:.8;
+  }
+  .cam-controls{
+    padding:26px 20px 34px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:20px;
+  }
+  .shutter{
+    width:74px;
+    height:74px;
+    border-radius:50%;
+    background:var(--paper);
+    border:5px solid var(--pink-deep);
+    cursor:pointer;
+  }
+  .shutter:active{transform:scale(.92);}
+  .review-controls{
+    padding:22px 20px 36px;
+    display:flex;
+    gap:12px;
+  }
+  .btn{
+    flex:1;
+    padding:16px 10px;
+    border-radius:14px;
+    border:none;
+    font-family:'Poppins',sans-serif;
+    font-weight:700;
+    font-size:15px;
+    cursor:pointer;
+  }
+  .btn-retake{
+    background:rgba(255,255,255,.12);
+    color:var(--paper);
+  }
+  .btn-use{
+    background:var(--pink-deep);
+    color:var(--ink);
+  }
+
+  /* ---- Completion overlay ---- */
+  .done-overlay{
+    position:fixed;
+    inset:0;
+    background:var(--ink);
+    z-index:60;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding:40px 30px;
+    opacity:0;
+    pointer-events:none;
+    transition:opacity .4s ease;
+  }
+  .done-overlay.show{opacity:1; pointer-events:auto;}
+  .done-overlay h2{
+    font-family:'Archivo Black',sans-serif;
+    color:var(--paper);
+    font-size:38px;
+    line-height:1;
+    margin:0 0 14px;
+  }
+  .done-overlay p{
+    color:var(--paper);
+    opacity:.85;
+    font-weight:600;
+    font-size:16px;
+    max-width:320px;
+    margin:0 auto;
+  }
+  .done-overlay .prize{
+    margin-top:26px;
+    background:var(--tape);
+    color:var(--ink);
+    font-weight:800;
+    padding:14px 22px;
+    border-radius:14px;
+    font-size:15px;
+  }
+  canvas#confetti{
+    position:fixed;
+    inset:0;
+    z-index:70;
+    pointer-events:none;
+  }
+  .accent-hand{
+    width:52px;
+    height:58px;
+    display:block;
+    margin:6px auto 0;
+    transform:rotate(165deg);
+  }
+  .eyebrow-row{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:2px;
+  }
+
+  .hand-ring{
+    position:relative;
+    width:220px;
+    height:220px;
+    margin:0 auto 8px;
+  }
+  .hand-ring svg{
+    position:absolute;
+    top:50%;
+    left:50%;
+    width:64px;
+    height:70px;
+  }
+  .hand-ring .prize-center{
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
+    width:120px;
+    height:120px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:38px;
+  }
+  .visually-hidden{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);}
+
+  @media (max-width:360px){
+    .photo-strip{height:44px;}
+    h1{font-size:38px;}
+  }
+</style>
+</head>
+<body>
+
+<!-- Original halftone pop-art accents (hand-drawn as SVG, not traced from any source image) -->
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <pattern id="halftone" width="7" height="7" patternUnits="userSpaceOnUse">
+      <circle cx="3.5" cy="3.5" r="1.9" fill="#18140f"/>
+    </pattern>
+    <pattern id="halftonePink" width="7" height="7" patternUnits="userSpaceOnUse">
+      <circle cx="3.5" cy="3.5" r="1.9" fill="#e8879e"/>
+    </pattern>
+
+    <symbol id="pointHand" viewBox="-42 -42 84 92">
+      <!-- offset shadow layer, pop-art style -->
+      <g transform="translate(4,4)" fill="url(#halftonePink)" stroke="#18140f" stroke-width="2">
+        <rect x="-6" y="-32" width="15" height="52" rx="7"/>
+        <ellipse cx="0" cy="20" rx="23" ry="17"/>
+        <ellipse cx="-17" cy="10" rx="9" ry="14" transform="rotate(-28 -17 10)"/>
+      </g>
+      <!-- main halftone layer -->
+      <g fill="url(#halftone)" stroke="#18140f" stroke-width="2.5">
+        <rect x="-6" y="-32" width="15" height="52" rx="7"/>
+        <ellipse cx="0" cy="20" rx="23" ry="17"/>
+        <ellipse cx="-17" cy="10" rx="9" ry="14" transform="rotate(-28 -17 10)"/>
+      </g>
+    </symbol>
+
+    <symbol id="megaphone" viewBox="-10 -30 100 70">
+      <g transform="translate(3,3)" fill="url(#halftonePink)" stroke="#18140f" stroke-width="2">
+        <polygon points="0,-6 0,6 22,20 22,-20"/>
+        <polygon points="22,-20 60,-32 60,32 22,20"/>
+        <rect x="-10" y="-3" width="12" height="10" rx="2"/>
+      </g>
+      <g fill="url(#halftone)" stroke="#18140f" stroke-width="2.5">
+        <polygon points="0,-6 0,6 22,20 22,-20"/>
+        <polygon points="22,-20 60,-32 60,32 22,20"/>
+        <rect x="-10" y="-3" width="12" height="10" rx="2"/>
+      </g>
+    </symbol>
+  </defs>
+</svg>
+
+<div class="wrap">
+  <div class="photo-strip" id="photoStrip" aria-hidden="true">
+    <div class="slot"></div><div class="slot"></div><div class="slot"></div><div class="slot"></div>
+  </div>
+
+  <header>
+    <h1>SCAVENGER<br>HUNT</h1>
+    <p class="sub"><span>Take Selfies..</span></p>
+    <div class="eyebrow-row">
+      <p class="eyebrow">Tap a box below to snap each one</p>
+      <svg class="accent-hand" viewBox="-42 -42 84 92" aria-hidden="true"><use href="#pointHand"></use></svg>
+    </div>
+  </header>
+
+  <div class="progress-row">
+    <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+    <div class="progress-count" id="progressCount">0 / 6</div>
+  </div>
+
+  <div id="taskList"></div>
+
+  <footer class="hint">Complete all six to unlock your prize 🎉</footer>
+</div>
+
+<!-- Camera overlay -->
+<div class="overlay" id="camOverlay">
+  <div class="cam-top">
+    <div class="cam-title"><span>Selfie for</span><span id="camTaskLabel"></span></div>
+    <button class="close-btn" id="camClose" aria-label="Close">✕</button>
+  </div>
+  <div class="cam-stage" id="camStage">
+    <video id="video" autoplay playsinline muted></video>
+    <img id="shotPreview" class="shot-preview" style="display:none;">
+    <p class="cam-msg" id="camMsg" style="display:none;"></p>
+  </div>
+  <div class="cam-controls" id="captureControls">
+    <button class="shutter" id="shutterBtn" aria-label="Take photo"></button>
+  </div>
+  <div class="review-controls" id="reviewControls" style="display:none;">
+    <button class="btn btn-retake" id="retakeBtn">Retake</button>
+    <button class="btn btn-use" id="useBtn">Use photo</button>
+  </div>
+</div>
+
+<!-- Completion overlay -->
+<div class="done-overlay" id="doneOverlay">
+  <div class="hand-ring" id="handRing" aria-hidden="true">
+    <div class="prize-center">🎉</div>
+  </div>
+  <h2>YOU DID IT!</h2>
+  <p>All six selfies are in the bag. Head back to the booth to claim your prize.</p>
+  <div class="prize">🎁 Show this screen at the booth</div>
+</div>
+
+<canvas id="confetti"></canvas>
+
+<script>
+const TASKS = [
+  { id:0, label:'High fiving a barista' },
+  { id:1, label:'At the hidden waterfall' },
+  { id:2, label:'Playing a piano' },
+  { id:3, label:'With a stranger' },
+  { id:4, label:'Doing / attempting the splits in the library' },
+  { id:5, label:'Pointing to the on-campus indoor airplane' },
+];
+
+let state = TASKS.map(t => ({ ...t, photo:null, rot:(Math.random()*8-4).toFixed(1) }));
+let activeTaskId = null;
+let stream = null;
+let capturedDataUrl = null;
+
+const taskListEl = document.getElementById('taskList');
+const progressFill = document.getElementById('progressFill');
+const progressCount = document.getElementById('progressCount');
+const camOverlay = document.getElementById('camOverlay');
+const camTaskLabel = document.getElementById('camTaskLabel');
+const video = document.getElementById('video');
+const shotPreview = document.getElementById('shotPreview');
+const camMsg = document.getElementById('camMsg');
+const captureControls = document.getElementById('captureControls');
+const reviewControls = document.getElementById('reviewControls');
+const shutterBtn = document.getElementById('shutterBtn');
+const retakeBtn = document.getElementById('retakeBtn');
+const useBtn = document.getElementById('useBtn');
+const camClose = document.getElementById('camClose');
+const doneOverlay = document.getElementById('doneOverlay');
+
+function render(){
+  taskListEl.innerHTML = '';
+  state.forEach(task => {
+    const row = document.createElement('div');
+    row.className = 'task';
+
+    const btn = document.createElement('button');
+    btn.className = 'box-btn' + (task.photo ? ' done' : '');
+    btn.setAttribute('aria-label', task.photo ? 'Retake selfie for ' + task.label : 'Take selfie for ' + task.label);
+
+    if(task.photo){
+      btn.innerHTML = `
+        <div class="polaroid" style="--rot:${task.rot}deg">
+          <img src="${task.photo}" alt="">
+        </div>
+        <span class="badge-check">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M4 12l6 6L20 6" stroke="#18140f" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>`;
+    }
+    btn.addEventListener('click', () => openCamera(task.id));
+
+    const copy = document.createElement('div');
+    copy.className = 'task-copy';
+    copy.innerHTML = `<p>${task.label}</p><small>${task.photo ? 'Tap to retake' : 'Tap the box to snap it'}</small>`;
+
+    row.appendChild(btn);
+    row.appendChild(copy);
+    taskListEl.appendChild(row);
+  });
+
+  const completed = state.filter(t => t.photo).length;
+  progressFill.style.width = (completed/state.length*100) + '%';
+  progressCount.textContent = `${completed} / ${state.length}`;
+
+  if(completed === state.length){
+    setTimeout(showCompletion, 450);
+  }
+}
+
+async function openCamera(taskId){
+  activeTaskId = taskId;
+  const task = state.find(t => t.id === taskId);
+  camTaskLabel.textContent = task.label;
+  capturedDataUrl = null;
+
+  video.style.display = 'block';
+  shotPreview.style.display = 'none';
+  camMsg.style.display = 'none';
+  captureControls.style.display = 'flex';
+  reviewControls.style.display = 'none';
+
+  camOverlay.classList.add('open');
+
+  try{
+    stream = await navigator.mediaDevices.getUserMedia({
+      video: { facingMode: 'user' },
+      audio: false
+    });
+    video.srcObject = stream;
+  }catch(err){
+    video.style.display = 'none';
+    camMsg.style.display = 'block';
+    camMsg.textContent = "Couldn't reach your camera. Check that camera access is allowed for this page, then try again.";
+    captureControls.style.display = 'none';
+  }
+}
+
+function closeCamera(){
+  camOverlay.classList.remove('open');
+  if(stream){
+    stream.getTracks().forEach(t => t.stop());
+    stream = null;
+  }
+  activeTaskId = null;
+}
+
+shutterBtn.addEventListener('click', () => {
+  const canvas = document.createElement('canvas');
+  canvas.width = video.videoWidth;
+  canvas.height = video.videoHeight;
+  const ctx = canvas.getContext('2d');
+  ctx.translate(canvas.width, 0);
+  ctx.scale(-1, 1);
+  ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+  capturedDataUrl = canvas.toDataURL('image/jpeg', 0.85);
+
+  shotPreview.src = capturedDataUrl;
+  video.style.display = 'none';
+  shotPreview.style.display = 'block';
+  captureControls.style.display = 'none';
+  reviewControls.style.display = 'flex';
+});
+
+retakeBtn.addEventListener('click', () => {
+  capturedDataUrl = null;
+  video.style.display = 'block';
+  shotPreview.style.display = 'none';
+  captureControls.style.display = 'flex';
+  reviewControls.style.display = 'none';
+});
+
+useBtn.addEventListener('click', () => {
+  if(activeTaskId === null || !capturedDataUrl) return;
+  const task = state.find(t => t.id === activeTaskId);
+  task.photo = capturedDataUrl;
+  closeCamera();
+  render();
+});
+
+camClose.addEventListener('click', closeCamera);
+
+function showCompletion(){
+  doneOverlay.classList.add('show');
+  buildHandRing();
+  fireConfetti();
+}
+
+function buildHandRing(){
+  const ring = document.getElementById('handRing');
+  const existing = ring.querySelectorAll('svg');
+  if(existing.length) return; // build once
+  const radius = 78;
+  const count = 6;
+  for(let i=0;i<count;i++){
+    const angle = (360/count)*i;
+    const rad = angle * Math.PI/180;
+    const x = Math.cos(rad)*radius;
+    const y = Math.sin(rad)*radius;
+    const svgNS = 'http://www.w3.org/2000/svg';
+    const svg = document.createElementNS(svgNS,'svg');
+    svg.setAttribute('viewBox','-42 -42 84 92');
+    svg.style.left = `calc(50% + ${x}px)`;
+    svg.style.top = `calc(50% + ${y}px)`;
+    svg.style.transform = `translate(-50%,-50%) rotate(${angle+90}deg)`;
+    const use = document.createElementNS(svgNS,'use');
+    use.setAttribute('href','#pointHand');
+    svg.appendChild(use);
+    ring.appendChild(svg);
+  }
+}
+
+/* ---- confetti ---- */
+const confettiCanvas = document.getElementById('confetti');
+const cctx = confettiCanvas.getContext('2d');
+let confettiPieces = [];
+let confettiAnim = null;
+
+function resizeConfetti(){
+  confettiCanvas.width = window.innerWidth;
+  confettiCanvas.height = window.innerHeight;
+}
+window.addEventListener('resize', resizeConfetti);
+resizeConfetti();
+
+const CONFETTI_COLORS = ['#e8879e', '#ffe07a', '#fff9f4', '#4a9d6f', '#18140f'];
+
+function fireConfetti(){
+  confettiPieces = [];
+  const count = 140;
+  for(let i=0;i<count;i++){
+    confettiPieces.push({
+      x: Math.random()*confettiCanvas.width,
+      y: -20 - Math.random()*confettiCanvas.height*0.5,
+      w: 6 + Math.random()*6,
+      h: 8 + Math.random()*10,
+      color: CONFETTI_COLORS[Math.floor(Math.random()*CONFETTI_COLORS.length)],
+      speed: 2 + Math.random()*3,
+      drift: (Math.random()-0.5)*2,
+      rot: Math.random()*360,
+      rotSpeed: (Math.random()-0.5)*10
+    });
+  }
+  let start = performance.now();
+  cancelAnimationFrame(confettiAnim);
+  function frame(now){
+    cctx.clearRect(0,0,confettiCanvas.width, confettiCanvas.height);
+    let stillFalling = false;
+    confettiPieces.forEach(p => {
+      p.y += p.speed;
+      p.x += p.drift;
+      p.rot += p.rotSpeed;
+      if(p.y < confettiCanvas.height + 20) stillFalling = true;
+      cctx.save();
+      cctx.translate(p.x, p.y);
+      cctx.rotate(p.rot * Math.PI/180);
+      cctx.fillStyle = p.color;
+      cctx.fillRect(-p.w/2, -p.h/2, p.w, p.h);
+      cctx.restore();
+    });
+    if(now - start < 4500 && stillFalling){
+      confettiAnim = requestAnimationFrame(frame);
+    } else {
+      cctx.clearRect(0,0,confettiCanvas.width, confettiCanvas.height);
+    }
+  }
+  confettiAnim = requestAnimationFrame(frame);
+}
+
+render();
+</script>
+</body>
+</html>
