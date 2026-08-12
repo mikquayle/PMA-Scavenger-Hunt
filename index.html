@@ -5,16 +5,32 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Scavenger Hunt</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://api.fontshare.com/v2/css?f[]=open-sauce-sans@700,800&display=swap" rel="stylesheet">
 <style>
+  /* Pragmatica is a commercial ParaType typeface — it can't be pulled from a
+     free CDN. This @font-face is wired up so that if you own a license and
+     drop the files into a /fonts folder in the repo (Pragmatica-Bold.woff2 /
+     .woff), it'll pick them up automatically. Until then it falls back to
+     Archivo Black, a free lookalike weight. */
+  @font-face{
+    font-family:'Pragmatica-Bold';
+    src:url('fonts/Pragmatica-Bold.woff2') format('woff2'),
+        url('fonts/Pragmatica-Bold.woff') format('woff');
+    font-weight:700;
+    font-style:normal;
+    font-display:swap;
+  }
   :root{
-    --pink-bg:#f3c4d3;
-    --pink-deep:#e8879e;
-    --pink-line:#d9a3b2;
+    --pink-bg:#f6bdb2;
+    --pink-deep:#e2665a;
+    --pink-line:#e0a89e;
     --ink:#18140f;
     --paper:#fff9f4;
     --tape:#ffe07a;
     --green:#4a9d6f;
+    --font-pragmatica:'Pragmatica-Bold','Archivo Black',sans-serif;
+    --font-opensauce:'Open Sauce Sans','Poppins',sans-serif;
   }
   *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
   html,body{margin:0;padding:0;}
@@ -48,12 +64,22 @@
   }
 
   header{margin-bottom:8px; text-align:center;}
+  .title-eyebrow-line{
+    font-family:var(--font-pragmatica);
+    font-weight:700;
+    font-size:22px;
+    letter-spacing:-0.077em;
+    line-height:1;
+    display:block;
+    margin:0 0 6px;
+  }
   h1{
-    font-family:'Archivo Black',sans-serif;
+    font-family:var(--font-opensauce);
+    font-weight:800;
     font-size:46px;
-    line-height:.9;
+    line-height:1;
     margin:0 0 12px;
-    letter-spacing:-.01em;
+    letter-spacing:-0.077em;
   }
   .sub{
     font-size:19px;
@@ -306,20 +332,52 @@
     align-items:center;
     justify-content:center;
     text-align:center;
-    padding:40px 30px;
+    padding:32px 26px;
     opacity:0;
     pointer-events:none;
     transition:opacity .4s ease;
+    overflow-y:auto;
   }
   .done-overlay.show{opacity:1; pointer-events:auto;}
+
+  .photo-grid{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:10px;
+    width:100%;
+    max-width:320px;
+    margin:0 0 20px;
+  }
+  .photo-grid .shot{
+    aspect-ratio:1;
+    border:2px solid var(--paper);
+    overflow:hidden;
+    background:#000;
+  }
+  .photo-grid .shot img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+  }
+
   .done-overlay h2{
-    font-family:'Archivo Black',sans-serif;
+    font-family:var(--font-opensauce);
+    font-weight:800;
     color:var(--paper);
-    font-size:38px;
+    font-size:36px;
     line-height:1;
+    letter-spacing:-0.05em;
+    margin:0 0 10px;
+  }
+  .done-time{
+    color:var(--tape);
+    font-weight:700;
+    font-size:14px;
+    text-transform:uppercase;
+    letter-spacing:.08em;
     margin:0 0 14px;
   }
-  .done-overlay p{
+  .done-overlay p.done-msg{
     color:var(--paper);
     opacity:.85;
     font-weight:600;
@@ -327,12 +385,25 @@
     max-width:320px;
     margin:0 auto;
   }
+  .prize-row{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:6px;
+    margin-top:24px;
+  }
+  .prize-row svg{
+    width:34px;
+    height:38px;
+    flex:none;
+  }
+  .prize-row svg:first-child{transform:rotate(90deg);}
+  .prize-row svg:last-child{transform:rotate(-90deg);}
   .done-overlay .prize{
-    margin-top:26px;
     background:var(--tape);
     color:var(--ink);
     font-weight:800;
-    padding:14px 22px;
+    padding:14px 18px;
     border-radius:14px;
     font-size:15px;
   }
@@ -343,43 +414,18 @@
     pointer-events:none;
   }
   .accent-hand{
-    width:52px;
-    height:58px;
+    width:56px;
+    height:62px;
     display:block;
-    margin:6px auto 0;
-    transform:rotate(165deg);
+    margin:8px auto 0;
+    transform:rotate(180deg);
+    overflow:visible;
   }
   .eyebrow-row{
     display:flex;
     flex-direction:column;
     align-items:center;
     gap:2px;
-  }
-
-  .hand-ring{
-    position:relative;
-    width:220px;
-    height:220px;
-    margin:0 auto 8px;
-  }
-  .hand-ring svg{
-    position:absolute;
-    top:50%;
-    left:50%;
-    width:64px;
-    height:70px;
-  }
-  .hand-ring .prize-center{
-    position:absolute;
-    top:50%;
-    left:50%;
-    transform:translate(-50%,-50%);
-    width:120px;
-    height:120px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-size:38px;
   }
   .visually-hidden{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);}
 
@@ -394,22 +440,15 @@
 <!-- Original halftone pop-art accents (hand-drawn as SVG, not traced from any source image) -->
 <svg width="0" height="0" style="position:absolute">
   <defs>
-    <pattern id="halftone" width="7" height="7" patternUnits="userSpaceOnUse">
-      <circle cx="3.5" cy="3.5" r="1.9" fill="#18140f"/>
-    </pattern>
-    <pattern id="halftonePink" width="7" height="7" patternUnits="userSpaceOnUse">
-      <circle cx="3.5" cy="3.5" r="1.9" fill="#e8879e"/>
-    </pattern>
-
     <symbol id="pointHand" viewBox="-42 -42 84 92">
       <!-- offset shadow layer, pop-art style -->
-      <g transform="translate(4,4)" fill="url(#halftonePink)" stroke="#18140f" stroke-width="2">
+      <g transform="translate(5,5)" fill="var(--pink-deep)" stroke="#18140f" stroke-width="2">
         <rect x="-6" y="-32" width="15" height="52" rx="7"/>
         <ellipse cx="0" cy="20" rx="23" ry="17"/>
         <ellipse cx="-17" cy="10" rx="9" ry="14" transform="rotate(-28 -17 10)"/>
       </g>
-      <!-- main halftone layer -->
-      <g fill="url(#halftone)" stroke="#18140f" stroke-width="2.5">
+      <!-- main solid layer -->
+      <g fill="#18140f">
         <rect x="-6" y="-32" width="15" height="52" rx="7"/>
         <ellipse cx="0" cy="20" rx="23" ry="17"/>
         <ellipse cx="-17" cy="10" rx="9" ry="14" transform="rotate(-28 -17 10)"/>
@@ -417,12 +456,12 @@
     </symbol>
 
     <symbol id="megaphone" viewBox="-10 -30 100 70">
-      <g transform="translate(3,3)" fill="url(#halftonePink)" stroke="#18140f" stroke-width="2">
+      <g transform="translate(4,4)" fill="var(--pink-deep)" stroke="#18140f" stroke-width="2">
         <polygon points="0,-6 0,6 22,20 22,-20"/>
         <polygon points="22,-20 60,-32 60,32 22,20"/>
         <rect x="-10" y="-3" width="12" height="10" rx="2"/>
       </g>
-      <g fill="url(#halftone)" stroke="#18140f" stroke-width="2.5">
+      <g fill="#18140f">
         <polygon points="0,-6 0,6 22,20 22,-20"/>
         <polygon points="22,-20 60,-32 60,32 22,20"/>
         <rect x="-10" y="-3" width="12" height="10" rx="2"/>
@@ -437,6 +476,7 @@
   </div>
 
   <header>
+    <span class="title-eyebrow-line">UNLV PMA</span>
     <h1>SCAVENGER<br>HUNT</h1>
     <p class="sub"><span>Take Selfies..</span></p>
     <div class="eyebrow-row">
@@ -477,12 +517,15 @@
 
 <!-- Completion overlay -->
 <div class="done-overlay" id="doneOverlay">
-  <div class="hand-ring" id="handRing" aria-hidden="true">
-    <div class="prize-center">🎉</div>
-  </div>
+  <div class="photo-grid" id="photoGrid" aria-hidden="true"></div>
   <h2>YOU DID IT!</h2>
-  <p>All six selfies are in the bag. Head back to the booth to claim your prize.</p>
-  <div class="prize">🎁 Show this screen at the booth</div>
+  <p class="done-time" id="doneTime"></p>
+  <p class="done-msg">Head back to the booth to claim your prize.</p>
+  <div class="prize-row">
+    <svg viewBox="-42 -42 84 92" aria-hidden="true"><use href="#pointHand"></use></svg>
+    <div class="prize">🎁 Show this screen at the booth</div>
+    <svg viewBox="-42 -42 84 92" aria-hidden="true"><use href="#pointHand"></use></svg>
+  </div>
 </div>
 
 <canvas id="confetti"></canvas>
@@ -501,6 +544,7 @@ let state = TASKS.map(t => ({ ...t, photo:null, rot:(Math.random()*8-4).toFixed(
 let activeTaskId = null;
 let stream = null;
 let capturedDataUrl = null;
+let huntStartTime = Date.now();
 
 const taskListEl = document.getElementById('taskList');
 const progressFill = document.getElementById('progressFill');
@@ -517,6 +561,32 @@ const retakeBtn = document.getElementById('retakeBtn');
 const useBtn = document.getElementById('useBtn');
 const camClose = document.getElementById('camClose');
 const doneOverlay = document.getElementById('doneOverlay');
+const photoGrid = document.getElementById('photoGrid');
+const doneTime = document.getElementById('doneTime');
+
+function formatDuration(ms){
+  const totalSec = Math.max(0, Math.round(ms/1000));
+  const min = Math.floor(totalSec/60);
+  const sec = totalSec%60;
+  if(min === 0) return `Finished in ${sec}s`;
+  return `Finished in ${min}m ${sec.toString().padStart(2,'0')}s`;
+}
+
+function buildPhotoGrid(){
+  photoGrid.innerHTML = '';
+  state.forEach(task => {
+    const cell = document.createElement('div');
+    cell.className = 'shot';
+    cell.style.transform = `rotate(${task.rot}deg)`;
+    if(task.photo){
+      const img = document.createElement('img');
+      img.src = task.photo;
+      img.alt = '';
+      cell.appendChild(img);
+    }
+    photoGrid.appendChild(cell);
+  });
+}
 
 function render(){
   taskListEl.innerHTML = '';
@@ -630,33 +700,10 @@ useBtn.addEventListener('click', () => {
 camClose.addEventListener('click', closeCamera);
 
 function showCompletion(){
+  doneTime.textContent = formatDuration(Date.now() - huntStartTime);
+  buildPhotoGrid();
   doneOverlay.classList.add('show');
-  buildHandRing();
   fireConfetti();
-}
-
-function buildHandRing(){
-  const ring = document.getElementById('handRing');
-  const existing = ring.querySelectorAll('svg');
-  if(existing.length) return; // build once
-  const radius = 78;
-  const count = 6;
-  for(let i=0;i<count;i++){
-    const angle = (360/count)*i;
-    const rad = angle * Math.PI/180;
-    const x = Math.cos(rad)*radius;
-    const y = Math.sin(rad)*radius;
-    const svgNS = 'http://www.w3.org/2000/svg';
-    const svg = document.createElementNS(svgNS,'svg');
-    svg.setAttribute('viewBox','-42 -42 84 92');
-    svg.style.left = `calc(50% + ${x}px)`;
-    svg.style.top = `calc(50% + ${y}px)`;
-    svg.style.transform = `translate(-50%,-50%) rotate(${angle+90}deg)`;
-    const use = document.createElementNS(svgNS,'use');
-    use.setAttribute('href','#pointHand');
-    svg.appendChild(use);
-    ring.appendChild(svg);
-  }
 }
 
 /* ---- confetti ---- */
