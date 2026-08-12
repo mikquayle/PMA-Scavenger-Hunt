@@ -1,0 +1,92 @@
+# Scavenger Hunt Selfie App — Beginner's Guide to Publishing on GitHub
+
+This app is one file: `index.html`. Everything — the design, the camera,
+the confetti — lives inside it. To put it on the internet so a QR code can
+point at it, we'll use **GitHub Pages**, which is free hosting built right
+into GitHub.
+
+You don't need to know git or the command line for this — everything below
+can be done by clicking around on github.com.
+
+## Step 1 — Make a GitHub account
+
+If you don't already have one, go to [github.com](https://github.com) and
+sign up. Free plan is all you need.
+
+## Step 2 — Create a new repository
+
+A "repository" (repo) is just a project folder on GitHub.
+
+1. Once logged in, click the **+** icon top-right → **New repository**.
+2. Give it a name, e.g. `scavenger-hunt`. No spaces — use a hyphen if you
+   need one.
+3. Keep it set to **Public** (Pages needs this on the free plan).
+4. Leave everything else as default. Click **Create repository**.
+
+## Step 3 — Upload the file
+
+1. On your new repo's page, click **Add file → Upload files**.
+2. Drag in `index.html` (and `README.md` if you want it there too).
+3. Scroll down, click **Commit changes**.
+
+That's it — your file is now on GitHub.
+
+## Step 4 — Turn on GitHub Pages
+
+1. In your repo, click **Settings** (top menu bar of the repo, not your
+   account settings).
+2. In the left sidebar, click **Pages**.
+3. Under "Build and deployment" → **Source**, choose **Deploy from a
+   branch**.
+4. Under **Branch**, choose `main` and folder `/ (root)`. Click **Save**.
+5. Wait about a minute, then refresh the page. GitHub will show you a green
+   box with your live URL, something like:
+   `https://your-username.github.io/scavenger-hunt/`
+
+Open that link on your phone to test it — you should see the pink
+scavenger hunt page and be able to tap a box to open your camera.
+
+## Step 5 — Make the QR code
+
+1. Copy your GitHub Pages URL from Step 4.
+2. Go to a free QR generator like [qr-code-generator.com](https://www.qr-code-generator.com)
+   or [qrcode-monkey.com](https://www.qrcode-monkey.com).
+3. Paste in your URL, generate, download the QR image, and print it for
+   your booth.
+
+**Important:** the camera only works over HTTPS. GitHub Pages URLs are
+always HTTPS, so this is handled automatically — no extra setup needed.
+
+## Making changes later
+
+Whenever you want to edit wording, colors, or tasks:
+
+1. Go to your repo on github.com, click on `index.html`.
+2. Click the pencil (✏️) icon top-right to edit directly in the browser.
+3. Make your changes, scroll down, click **Commit changes**.
+4. GitHub Pages updates automatically within a minute or two — no need to
+   redo Step 4.
+
+### What to edit for common tweaks
+
+- **Task wording:** search for `const TASKS =` near the top of the
+  `<script>` section — each line is one task's label.
+- **Colors:** search for `:root{` near the top of the `<style>` section —
+  `--pink-bg`, `--ink`, `--tape` etc. control the palette everywhere at
+  once.
+- **Photo collage strip:** right under the opening `<body>` tag there's a
+  `.photo-strip` block with four placeholder swatches. If you have rights
+  to your own top-down table photos, upload the images to the repo (same
+  "Add file → Upload files" as before) and swap a swatch `<div>` for
+  `<img src="your-photo.jpg">`.
+
+## Notes
+
+- Progress is kept in the browser's memory only — reloading the page resets
+  it. That's fine for a single sitting at a booth. If you want progress to
+  survive someone closing the tab and coming back later, let me know and
+  I'll wire that in.
+- If a student denies camera permission, they'll see a friendly fallback
+  message instead of a blank screen.
+- The pointing-hand graphics are original artwork drawn for this app (not
+  copied from any source image), so they're yours to use freely.
