@@ -29,7 +29,8 @@
     --ink:#000000;
     --gray:#606060;
     --paper:#ffffff;
-    --green:#2f7a4d;
+    --green:#8bc34a;
+    --gold:#d4af37;
     --font-pragmatica:'Pragmatica-Bold','Archivo Black',sans-serif;
     --font-opensauce:'Open Sauce Sans','Poppins',sans-serif;
   }
@@ -96,22 +97,23 @@
   }
   .progress-track{
     flex:1;
-    height:10px;
-    background:rgba(255,255,255,.55);
+    height:16px;
+    background:rgba(212,175,55,.28);
     border-radius:99px;
     overflow:hidden;
-    border:2px solid var(--ink);
+    border:2px solid var(--gold);
   }
   .progress-fill{
     height:100%;
-    background:var(--ink);
+    background:var(--gold);
     width:0%;
     transition:width .5s cubic-bezier(.65,0,.35,1);
   }
   .progress-count{
     font-weight:800;
-    font-size:14px;
+    font-size:15px;
     white-space:nowrap;
+    color:var(--gold);
   }
 
   .task{
@@ -358,7 +360,7 @@
     margin:0 0 10px;
   }
   .done-time{
-    color:var(--scarlet-soft);
+    color:var(--gold);
     font-weight:700;
     font-size:14px;
     text-transform:uppercase;
@@ -372,16 +374,6 @@
     font-size:16px;
     max-width:320px;
     margin:0 auto;
-  }
-  .done-overlay .prize{
-    margin-top:22px;
-    background:var(--paper);
-    border:3px solid var(--scarlet);
-    color:var(--ink);
-    font-weight:800;
-    padding:14px 18px;
-    border-radius:14px;
-    font-size:15px;
   }
   .btn-share{
     margin-top:16px;
@@ -442,7 +434,7 @@
 <!-- Camera overlay -->
 <div class="overlay" id="camOverlay">
   <div class="cam-top">
-    <div class="cam-title"><span>Selfie for</span><span id="camTaskLabel"></span></div>
+    <div class="cam-title"><span>Take a selfie..</span><span id="camTaskLabel"></span></div>
     <button class="close-btn" id="camClose" aria-label="Close">✕</button>
   </div>
   <div class="cam-stage" id="camStage">
@@ -465,7 +457,6 @@
   <h2>YOU DID IT!</h2>
   <p class="done-time" id="doneTime"></p>
   <p class="done-msg">Head back to the booth to claim your prize.</p>
-  <div class="prize">🎁 Show this screen at the booth</div>
   <button class="btn-share" id="sharePhotosBtn">Save / Send Your Photos</button>
   <p class="share-hint">Saves to your camera roll, or lets you text/email them to us</p>
 </div>
