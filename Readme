@@ -79,6 +79,13 @@ Whenever you want to edit wording, colors, or tasks:
   to your own top-down table photos, upload the images to the repo (same
   "Add file → Upload files" as before) and swap a swatch `<div>` for
   `<img src="your-photo.jpg">`.
+- **Fonts:** the title uses two custom typefaces — "UNLV PMA" is set in
+  Pragmatica Bold, "SCAVENGER HUNT" in Open Sauce Sans Bold. Open Sauce is
+  free and loads automatically from Fontshare. Pragmatica is a paid
+  commercial font (ParaType) that can't be pulled from a free CDN — if you
+  own a license, upload `Pragmatica-Bold.woff2` (and `.woff` if you have
+  it) into a `fonts/` folder in the repo and it'll pick it up automatically.
+  Until then, the page falls back to Archivo Black, a free lookalike.
 
 ## Notes
 
